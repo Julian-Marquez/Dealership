@@ -39,7 +39,7 @@ try{
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Trator</title>
+      <title>All Vehicles</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -57,7 +57,8 @@ try{
       <!-- Scrollbar Custom CSS -->
       <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
-      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-pc9rx5Lm...your-integrity-hash" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
             <script src="js/script.js"></script>
    </head>
    <body>
@@ -161,6 +162,23 @@ try{
   box-shadow: 0px 4px 8px rgba(0, 80, 170, 0.5);
   transform: scale(0.98);
 }
+.financing-header {
+  color: blue; /* Bright, modern blue that fits your theme */
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 2.2rem;
+  letter-spacing: 1.5px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+  margin-top: 8px;
+}
+.financing-header i {
+  color: #00d4ff; /* Light blue to match your site's theme */
+  margin-right: 10px;
+  font-size: 1.8rem;
+  vertical-align: middle;
+}
+
 
 </style>
 
@@ -233,13 +251,17 @@ try{
 
       %>
                 <div  class="col-md-4" data-mileage="<%= car.getMileage() %>" data-brand="<%= car.getBrand()%>" data-model="<%= car.getModel()%>" data-image="<%= vehicleImage %>" data-price="<%= car.getPrice() %>" data-id="<%= car.getVehicleId() %>">
-                  <div style="color: black; background-color: #fe5b29;"  class="gallery_box vehicle-card" >
+                  <div style="color: black; background-color: white;"  class="gallery_box vehicle-card" ><h1 class="financing-header">
+  <i class="fas fa-credit-card"></i> We Finance All Credit
+</h1>
+
+
                     <div class="gallery_img">
                       <img src="data:image/jpeg;base64,<%= vehicleImage %>">
                     </div>
                     <h3  class="types_text"><%= car.getBrand() %> <%= car.getModel() %></h3>
-                    <p  id="mileage" style="color: gray;"class="looking_text">Mileage: <%= car.getMileage() %></p>
-                    <h4 id="price" class="types_text">Price $<%= car.getPrice() %></h4>
+                    <p  id="mileage"  class="mileage_text">Mileage: <%= car.getMileage() %></p>
+                    <h4 id="price" style="font-family: 'Lato', sans-serif;" class="types_text">Price $<%= car.getPrice() %></h4>
                    <div class="row">
                    
  <form action="handleVehicles" method="get" style="margin-bottom: 10px;">
@@ -365,8 +387,17 @@ try{
             </div>
          </div>
       </div>
-      <!-- copyright section end -->
-      <!-- Javascript files-->
+      <style>
+            .mileage_text {
+  color: black;       /* white or theme-matching color */
+  font-size: 18px;        /* slightly bigger than default */
+  font-weight: 500;       /* semi-bold to highlight it */
+  margin-top: -10px;      /* optional: adjust space below 'Mileage:' label */
+  margin-bottom: 10px;
+  font-family: 'Arial', sans-serif;
+}
+      
+      </style>
 
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>

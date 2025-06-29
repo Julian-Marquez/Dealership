@@ -56,4 +56,14 @@
     <servlet-name>Recovery</servlet-name>
      <url-pattern>/Recovery</url-pattern>
   </servlet-mapping>
+<servlet>
+    <servlet-name>handleApplications</servlet-name>
+    <servlet-class>deal.handleApplications</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>handleApplications</servlet-name>
+    <url-pattern>/handleApplications</url-pattern>
+</servlet-mapping>
+
 </web-app>

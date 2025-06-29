@@ -45,5 +45,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="C:/Users/marqu/eclipse-workspace/Dealership/src/main/webapp/WEB-INF/lib/jakarta.mail-2.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/marqu/eclipse-workspace/Dealership/src/main/webapp/WEB-INF/lib/jakarta.mail-2.0.1-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/webapp/WEB-INF/lib/jakarta.activation-2.0.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

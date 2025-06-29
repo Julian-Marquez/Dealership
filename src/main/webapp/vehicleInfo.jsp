@@ -177,6 +177,32 @@ p {
   border-radius: 12px;
 }
 
+.vehicle-details {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: black;
+  text-align: left;
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vehicle-details strong {
+  color: black;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+}
+
+
 
 </style>
    <body>
@@ -285,7 +311,7 @@ p {
 
                   
                         <h1 class="about_taital"><%= vehicle.getYear() %> <span style="color: #fe5b29;"><%= vehicle.getBrand() %></span> <%= vehicle.getModel() %></h1>
-   
+<div class="vehicle-details">
     <strong><i class="fas fa-dollar-sign"></i> Price:</strong> $<%= vehicle.getPrice() %><br>
     <strong><i class="fas fa-tachometer-alt"></i> Mileage:</strong> <%= vehicle.getMileage() %> miles<br>
     <strong><i class="fas fa-map-marker-alt"></i> Location:</strong> <%= vehicle.getLocation() %><br>
@@ -293,7 +319,7 @@ p {
     <strong><i class="fas fa-user"></i> Owner:</strong> <%= vehicle.getOwner().getFirstName() %> <%= vehicle.getOwner().getLastName() %><br>
     <strong><i class="fas fa-calendar-check"></i> Date Posted:</strong> <%= vehicle.getDatePosted() %><br>
     <strong><i class="fas fa-phone-alt"></i> Contact:</strong> <%= vehicle.getOwner().getPhone() %><br>
-
+</div>
  <div id="map" ></div>
 
                         <p style="color: gray;"><%=vehicle.getDescription()%></p>

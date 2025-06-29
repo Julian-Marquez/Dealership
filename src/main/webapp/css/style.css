@@ -553,11 +553,15 @@ span.current {
 }
 
 
-/* select box section end */
-/* search section end */
-
-
-/* gallery section start */
+      .mileage_text {
+  color: #fe5b29;       /* white or theme-matching color */
+  font-size: 18px;        /* slightly bigger than default */
+  font-weight: 500;       /* semi-bold to highlight it */
+  margin-top: -10px;      /* optional: adjust space below 'Mileage:' label */
+  margin-bottom: 10px;
+  font-family: 'Arial', sans-serif;
+}
+      
 
 .gallery_section {
     width: 100%;
@@ -1110,7 +1114,15 @@ textarea#comment::placeholder {
 }
 
 
-/* copyright section end */
+      .mileage_text {
+  color: #fe5b29;       /* white or theme-matching color */
+  font-size: 18px;        /* slightly bigger than default */
+  font-weight: 500;       /* semi-bold to highlight it */
+  margin-top: -10px;      /* optional: adjust space below 'Mileage:' label */
+  margin-bottom: 10px;
+  font-family: 'Arial', sans-serif;
+}
+      
 
 .margin_top90 {
     margin-top: 90px;

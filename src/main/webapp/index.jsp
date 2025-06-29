@@ -19,7 +19,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Jorge's DealerShip</title>
+      <title>Turbo Motors-Dealership</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -37,8 +37,8 @@
       <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
       
       <link rel="stylesheet" href="css/buttons.css">
-      <!-- Tweaks for older IEs-->
-      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-pc9rx5Lm...your-integrity-hash" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
    </head>
    <body>
       <!-- header section start -->
@@ -55,7 +55,7 @@
                         <a class="nav-link" href="index.jsp">Home</a>
                      </li>
                      <li class="nav-item">
-                        <a class="nav-link" href="about.jsp">About</a>
+                        <a class="nav-link" href="#">About</a>
                      </li>
                      <li class="nav-item">
                         <a class="nav-link" href="allVehicles.jsp">Vehicles</a>
@@ -81,7 +81,23 @@
             </nav>
          </div>
       </div>
-      <!-- header section end -->
+      <style>
+            .mileage_text {
+  color: #fe5b29;       
+  font-size: 18px;       
+  font-weight: 500;    
+  margin-top: -10px;    
+  margin-bottom: 10px;
+  font-family: 'Lato', sans-serif;
+}
+    .financing-header i {
+  color: #00d4ff; /* Light blue to match your site's theme */
+  margin-right: 10px;
+  font-size: 1.8rem;
+  vertical-align: middle;
+}
+      
+      </style>
       <div class="call_text_main">
          <div class="container">
          </div>
@@ -115,6 +131,9 @@
                         <div class="carousel-item">
                            <div class="banner_taital_main">
                               <h1 class="banner_taital">Get<br><span style="color: #fe5b29;">Pre Approved</span></h1>
+                              <div class="btn_main">
+                                 <div class="contact_bt active"><a href="applying.jsp">Get Started</a></div>
+                              </div>
                             <p class="banner_text">Fast and easy financing — get pre-approved today and drive away with confidence!</p>
 
                              
@@ -212,10 +231,14 @@
               <input name="action" value="view" type="hidden">
                <div class="row">
                   <div   class="col-md-4">
-                     <div style="background-color:gray;" class="gallery_box">
+                     <div style="background-color:white;" class="gallery_box">
+                     <h1 class="financing-header">
+  <i class="fas fa-credit-card"></i> We Finance All Credit
+</h1>
                         <div  class="gallery_img"><img src="data:image/jpeg;base64,<%= vehicleImage1 %>"></div>
+                        
                         <h3 class="types_text"><%= vehicle1.getBrand() %> <%= vehicle1.getModel() %></h3>
-                          <p class="looking_text"><%= vehicle1.getMileage() %></p>
+                           <h4 style="color:black;" class="safety_text">Mileage:  </h4><p class="mileage_text"><%= vehicle1.getMileage() %></p>
                            <button name="id" value="<%= vehicle1.getVehicleId() %>" class="cta">
 			  <div class="arrow">
 			    <div></div>
@@ -226,10 +249,13 @@
                      </div>
                   </div>
                   <div   class="col-md-4">
-                      <div style="background-color:gray;" class="gallery_box">
+                      <div style="background-color:white;" class="gallery_box">
+                      <h1 class="financing-header">
+  <i class="fas fa-credit-card"></i> We Finance All Credit
+</h1>
                         <div class="gallery_img"><img src="data:image/jpeg;base64,<%= vehicleImage2 %>"></div>
                         <h3 class="types_text"><%= vehicle2.getBrand() %> <%= vehicle2.getModel() %></h3>
-                          <p class="looking_text"><%= vehicle2.getMileage() %></p>
+                        <h4 style="color:black;" class="safety_text">Mileage:  </h4>  <p class="mileage_text"><%= vehicle2.getMileage() %></p>
                            <button name="id" value="<%= vehicle2.getVehicleId() %>" class="cta">
 			  <div class="arrow">
 			    <div></div>
@@ -240,10 +266,13 @@
                      </div>
                   </div>
                   <div class="col-md-4">
-                      <div style="background-color:gray;" class="gallery_box">
+                      <div style="background-color:white;" class="gallery_box">
+                      <h1 class="financing-header">
+  <i class="fas fa-credit-card"></i> We Finance All Credit
+</h1>
                         <div class="gallery_img"><img src="data:image/jpeg;base64,<%= vehicleImage3 %>"></div>
                         <h3 class="types_text"><%= vehicle3.getBrand() %> <%= vehicle3.getModel() %></h3>
-                          <p class="looking_text"><%= vehicle3.getMileage() %></p>
+                           <h4  style="color:black;" class="safety_text">Mileage:  </h4><p class="mileage_text"><%= vehicle3.getMileage() %></p>
                           <button name="id" value="<%= vehicle3.getVehicleId() %>" class="cta">
 			  <div class="arrow">
 			    <div></div>
@@ -260,6 +289,7 @@
          </div>
       </div>
       <%} %>
+      
       <!-- gallery section end -->
       <!-- choose section start -->
       <div class="choose_section layout_padding">
@@ -282,15 +312,89 @@
                      <p class="ipsum_text">Local and convenient for everyone in the Albuquerque Area</p>
                   </div>
                   <div class="col-sm-4">
-                     <div class="icon_1"><img src="images/icon-3.png"></div>
-                     <h4 class="safety_text">Best Drivers</h4>
-                     <p class="ipsum_text">variations of passages of Lorem Ipsum available, but the majority have </p>
-                  </div>
+				   <div class="icon_1"><img src="images/icon-3.png"></div>
+				   <h4 class="safety_text">Custom Design</h4>
+				   <p class="ipsum_text">Tailored web solutions designed to match your unique style and business needs, ensuring a standout online presence.</p>
+				</div>
                </div>
             </div>
          </div>
       </div>
       <!-- choose section end -->
+ <div class="about_section layout_padding">
+   <div class="container">
+      <div class="about_section_2">
+         <div class="row align-items-center">
+            <div class="col-md-6"> 
+               <div class="image_iman text-center">
+                  <img src="images/webDev.png" class="about_img" alt="Web Development">
+               </div>
+            </div>
+            <div class="col-md-6"> 
+               <div class="about_taital_box">
+                  <h1 class="about_taital">Website<span style="color: #fe5b29;"> Needed?</span></h1>
+                  <p class="about_text">
+                     Bring your vision to life with a professionally crafted website. 
+                     Whether you're launching a business, showcasing your portfolio, or expanding your online presence, 
+                     we design sleek, responsive, and engaging sites tailored to your needs. Let's build something extraordinary.
+                  </p>
+                  <div class="social_icon mt-3 text-center">
+				   
+				   <a href="needWebsite.jsp" target="_blank" class="github_link">
+				      <h2 class="contact_text">Explore My Work</h2>
+				   </a>
+				</div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<style>
+.about_section {
+   padding: 60px 0;
+}
+.about_img {
+   max-width: 100%;
+   height: auto;
+   border-radius: 10px;
+}
+.about_taital {
+   font-size: 2.5rem;
+   font-weight: bold;
+}
+.contact_text {
+   font-size: 1.5rem;
+   margin-bottom: 10px;
+}
+.social_icon {
+   margin-top: 20px;
+}
+.social_img {
+   width: 60px;
+   height: 60px;
+   transition: transform 0.3s ease;
+}
+.instagram_link:hover .social_img {
+   transform: scale(1.1);
+}
+.github_link:hover .social_img {
+   transform: scale(1.1);
+}
+
+.financing-header {
+  color: blue; /* Bright, modern blue that fits your theme */
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 2.2rem;
+  letter-spacing: 1.5px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+  margin-top: 8px;
+}
+
+</style>
       <!-- client section start -->
       
       <!-- footer section start -->
