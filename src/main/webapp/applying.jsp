@@ -268,6 +268,23 @@ try {
 			  </div>
 			</div>
 
+             <div class="form-group">
+  <div class="row">
+    <div class="col-md-6">
+      <label for="SSN">Full Social Security Number</label>
+      <input  type="password" class="form-control" id="SSN" name="SSN" placeholder="000-00-0000" required>
+    </div>
+    <div class="col-md-6 d-flex align-items-start">
+      <div class="form-check mt-4">
+        <input onclick="checkSSN(event)" class="form-check-input" type="checkbox" id="confirm" name="confirm" required>
+        <label class="form-check-label" for="confirm">
+          By checking this box, I agree to let Turbo Motors use and run a full credit check on the information provided.
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
              
                <button  type="submit" class="btn btn-login btn-block text-white">Submit</button>
             </form>
@@ -282,6 +299,30 @@ try {
             </div>
          </div>
       </div>
+      
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+  const ssn = document.getElementById('SSN').value.trim();
+  const checkbox = document.getElementById('confirm');
+
+  // Check that SSN is exactly 9 digits
+  const ssnPattern = /^\d{9}$/;
+
+  if (!ssnPattern.test(ssn)) {
+    alert("Please enter a valid 9-digit SSN without dashes.");
+    e.preventDefault();
+    return;
+  }
+
+  if (!checkbox.checked) {
+    alert("You must agree to the credit check before submitting.");
+    e.preventDefault();
+    return;
+  }
+});
+</script>
+
+
       <!-- copyright section end -->
       <!-- Javascript files-->
       <script src="js/applying.js"></script>
