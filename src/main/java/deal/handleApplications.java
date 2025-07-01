@@ -58,6 +58,7 @@ public class handleApplications extends HttpServlet {
 	    String city = request.getParameter("city");
 	    String state = request.getParameter("state");
 	    String zip = request.getParameter("zip");
+	    String tempSSN = request.getParameter("SSN");
 
 	    String brand = request.getParameter("brand");
 	    String model = request.getParameter("model");
@@ -70,11 +71,10 @@ public class handleApplications extends HttpServlet {
 	    String trade = request.getParameter("tradeValue");
 	    String months = request.getParameter("months");
 	    String vehicleYears = request.getParameter("vehicleYears");
+	    
+	    String SSN = tempSSN.substring(0,3) + "-" + tempSSN.substring(3,5) + "-" + tempSSN.substring(5,9);
 
-	    // PDF setup
-	   // response.setContentType("application/pdf");
-	//    response.setHeader("Content-Disposition", "attachment; filename=financing_application.pdf");
-
+	 
 	    
 	    File tempFile = new File(System.getProperty("java.io.tmpdir"), "application_" + System.currentTimeMillis() + ".pdf");
 	    Document doc = new Document();
@@ -115,6 +115,7 @@ public class handleApplications extends HttpServlet {
 	    addRow(personalTable, "Email", email, labelFont, valueFont);
 	    addRow(personalTable, "Phone", phone, labelFont, valueFont);
 	    addRow(personalTable, "Address", address + ", " + city + ", " + state + " " + zip, labelFont, valueFont);
+	    addRow(personalTable, "SSN", SSN, labelFont, valueFont);
 	    doc.add(personalTable);
 
 	    // Divider
@@ -189,7 +190,7 @@ public class handleApplications extends HttpServlet {
 	        }
 	    });
 
-	    try {
+	    try {//
 	        MimeMessage message = new MimeMessage(session);
 	        message.setFrom(new InternetAddress("TruboMotors_Team@gmail.com", "Turbo Motors"));
 	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("Turbomotorsllc@yahoo.com"));
