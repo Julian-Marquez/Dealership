@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="deal.*" %>
+<%@ page import="deal.*" %><%@ page import="java.util.*" %>
 <%
 ServletContext context = request.getServletContext();
 
 User user = null;
+Database connect = new Database();
 String firstName = "placeholder=\"Enter First Name\"";
 String lastName = "placeholder=\"Enter Last Name\"";
 String email = "placeholder=\"Enter Full Email\"";
@@ -20,6 +21,20 @@ try {
 } catch (Exception e) {
     // Optional: log or handle error
 }
+
+List<Vehicle> allVehicles = null;
+
+try{
+
+ allVehicles = connect.getAllVehicles();
+	
+}catch(NullPointerException e){
+	
+}catch(IndexOutOfBoundsException w){
+	
+}
+
+
 %>
 
 <!DOCTYPE html>
@@ -38,8 +53,7 @@ try {
       <link rel="stylesheet" href="css/buttons.css">
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
 	  <script src="js/jquery.min.js"></script>
-
-
+	
 
 	  
 <style>
@@ -153,13 +167,25 @@ try {
               <div class="row">
 			    <div class="col-md-6">
                   <label for="vehicle">Select A Vehicle</label>
-                  <select class="form-control" id="brand" name="brand" required>
+                  <select class="form-control"id="brandDrop" name="brand" required>
 			         <option value="" disabled selected>Any Brand</option>
+         <% 
+         if(!allVehicles.isEmpty()){   HashSet<String> uniqueBrands = new HashSet<>();
+            for (Vehicle v : allVehicles) { %>
+             <%   String brand = v.getBrand();
+               if (uniqueBrands.add(brand)) {
+         %>
+               <option value="<%= brand %>"><%= brand %></option>
+         <% 
+               }
+            }
+            }
+         %>
 			         </select>
                </div>
 			    <div class="col-md-6">
                   <label for="model">Select A Vehicle</label>
-                  <select class="form-control" id="model" name="model" required>
+                  <select class="form-control" id="modelDrop" name="model" required>
 			         <option value="" disabled selected>Any Model</option>
 			         </select>
 			         </div>
@@ -272,7 +298,7 @@ try {
   <div class="row">
     <div class="col-md-6">
       <label for="SSN">Full Social Security Number</label>
-      <input  type="password" class="form-control" id="SSN" name="SSN" placeholder="000-00-0000" required>
+      <input  type="password" class="form-control" maxlength="9" pattern="\d{9}" id="SSN" name="SSN" placeholder="000-00-0000" required>
     </div>
     <div class="col-md-6 d-flex align-items-start">
       <div class="form-check mt-4">
@@ -299,6 +325,12 @@ try {
             </div>
          </div>
       </div>
+      <!-- Put these below the form, at the bottom of the JSP body -->
+<div id="vehicle-data" style="display: none;">
+<% for (Vehicle v : allVehicles) { %>
+  <div class="vehicle-item" data-brand="<%= v.getBrand()%>" data-model="<%= v.getModel()%>"></div>
+<% } %>
+</div>
       
 <script>
 document.querySelector('form').addEventListener('submit', function(e) {
