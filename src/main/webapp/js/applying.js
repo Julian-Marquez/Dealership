@@ -1,56 +1,55 @@
+let brandModelMap = {};
+
+async function initializeBrandModelMap() {
+  const carDivs = document.querySelectorAll('.vehicle-item');
+  brandModelMap = {};
+
+  carDivs.forEach(div => {
+    const brand = div.dataset.brand;
+    const model = div.dataset.model;
+
+    if (brand && model) {
+      if (!brandModelMap[brand]) {
+        brandModelMap[brand] = new Set();
+      }
+      brandModelMap[brand].add(model);
+    }
+  });
+
+  // Convert sets to arrays
+  for (const brand in brandModelMap) {
+    brandModelMap[brand] = Array.from(brandModelMap[brand]).sort();
+  }
+}
 
 window.onload = async function () {
 	
-	fetchData();
-	fetchVehicles();
-	};
-	
-	async function fetchVehicles(){
-	
-  // ========== VEHICLE BRANDS & MODELS ==========
-  const commonBrands = [
-    "Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "BMW", "Mercedes-Benz",
-    "Hyundai", "Volkswagen", "Kia", "Audi", "Jeep", "Lexus", "Subaru",
-    "Mazda", "GMC", "Dodge", "Ram", "Tesla", "Cadillac", "Chrysler", "Volvo"
-  ];
+  fetchData();
+  await initializeBrandModelMap();
 
-  const brandSelect = document.getElementById('brand');
-  const modelSelect = document.getElementById('model');
+  const brandSelect = document.getElementById('brandDrop');
 
-  commonBrands.forEach(brand => {
-    const option = document.createElement('option');
-    option.value = brand;
-    option.textContent = brand;
-    brandSelect.appendChild(option);
+  brandSelect.addEventListener('change', function () {
+    const selectedBrand = brandSelect.value;
+    populateModels(selectedBrand);
   });
+};
 
-  brandSelect.addEventListener('change', () => {
-    const brand = brandSelect.value;
+function populateModels(selectedBrand) {
+  const modelSelect = document.getElementById('modelDrop');
+  let options = '<option value="">Any Model</option>';
+  if (brandModelMap[selectedBrand]) {
+    brandModelMap[selectedBrand].forEach(model => {
+      options += `<option value="${model}">${model}</option>`;
+    });
+  }
+  else{
+	options += `<option value="${model}">Error loading brands</option>`;
+  }
+  modelSelect.innerHTML = options;
+  modelSelect.value = "";
+}
 
-    modelSelect.innerHTML = '<option value="">Loading models...</option>';
-    modelSelect.disabled = true;
-
-    fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${encodeURIComponent(brand)}?format=json`)
-      .then(response => response.json())
-      .then(data => {
-        modelSelect.innerHTML = '<option value="" disabled selected>Select a model</option>';
-        data.Results.forEach(model => {
-          const option = document.createElement('option');
-          option.value = model.Model_Name;
-          option.textContent = model.Model_Name;
-          modelSelect.appendChild(option);
-        });
-        modelSelect.disabled = false;
-      })
-      .catch(error => {
-        console.error("Error fetching models:", error);
-        modelSelect.innerHTML = '<option value="">Error loading models</option>';
-      });
-	  
-  });
-  
-  };
-  
   async function fetchData(){
   // ========== STATE & CITY DROPDOWNS ==========
   const username = 'marquezjulian09'; // GeoNames username
@@ -160,3 +159,32 @@ window.onload = async function () {
     cityDropdown.innerHTML = display;
   }
 };
+
+
+async function initializeBrandModelPriceMap() {
+  const carDivs = document.querySelectorAll('.col-md-4');
+  brandModelPriceMap = {};
+
+  carDivs.forEach(div => {
+    const brand = div.dataset.brand;
+    const model = div.dataset.model;
+    const price = parseFloat(div.dataset.price);
+
+    if (brand && model && !isNaN(price)) {
+      if (!brandModelPriceMap[brand]) {
+        brandModelPriceMap[brand] = {};
+      }
+      if (!brandModelPriceMap[brand][model]) {
+        brandModelPriceMap[brand][model] = new Set();
+      }
+      brandModelPriceMap[brand][model].add(price);
+    }
+  });
+
+  // Convert all sets to sorted arrays
+  for (const brand in brandModelPriceMap) {
+    for (const model in brandModelPriceMap[brand]) {
+      brandModelPriceMap[brand][model] = Array.from(brandModelPriceMap[brand][model]).sort((a,b) => a-b);
+    }
+  }
+}
