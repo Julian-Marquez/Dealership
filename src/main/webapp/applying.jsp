@@ -122,6 +122,77 @@ try{
   .btn:hover {
     background-color: #e14a1c;
   }
+ :root {
+  --toggle-height: 40px;
+  --border-radius: 25px;
+  --primary-color: #fe5b29;
+  --secondary-color: #888;
+  --background-dark: #e0e0e0;
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.2);
+}
+
+.contact-toggle {
+  position: relative;
+  width: 140px;
+  height: var(--toggle-height);
+  background-color: var(--background-dark);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  box-shadow: inset 0 1px 4px var(--shadow-light);
+  transition: all 0.3s ease;
+  margin: 0 auto 20px auto;
+  border: 1px solid #ccc;
+}
+
+.contact-toggle input {
+  display: none;
+}
+
+.contact-toggle .toggle-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 6px);
+  height: calc(var(--toggle-height) - 6px);
+  background-color: white;
+  border-radius: calc(var(--border-radius) - 5px);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 5px var(--shadow-medium);
+  z-index: 1;
+}
+
+#email-contact:checked ~ .toggle-slider {
+  left: calc(50% + 3px);
+}
+
+.toggle-option {
+  flex: 1;
+  text-align: center;
+  z-index: 2;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: color 0.3s ease;
+}
+
+.toggle-option i {
+  font-style: normal;
+  font-size: 1em;
+}
+
+#phone-contact:checked ~ .toggle-option[for="phone-contact"],
+#email-contact:checked ~ .toggle-option[for="email-contact"] {
+  color: var(--primary-color);
+}
+
 </style>
 
    </head>
@@ -162,7 +233,7 @@ try{
          <div class="login-box">
          <h1 class="login-title">See You if Apply</h1>
             <h2 style="color:black;" class="login-title">Vehicle Credit Application </h2>
-            <form action="handleApplications" method="post">
+            <form action="handleApplications" method="post" enctype="multipart/form-data">
               <div class="form-group">
               <div class="row">
 			    <div class="col-md-6">
@@ -225,6 +296,42 @@ try{
                </div>
                </div>
                </div>
+                     <div class="form-group">
+              <div class="row">
+             <div class="col-md-6">
+                  <label for="phone">Date Of Birth</label>
+                  <input type="text" class="form-control" id="DOB" name="DOB" placeholder="MM/DD/YYYY" required>
+               </div>
+               </div>
+               </div>
+                 <div class="form-group">
+              <div class="row">
+			    <div class="col-md-6">
+                  <label for="image">Proof Of Residence (renting, mortgage) </label>
+                  <input required type="file" class="form-control" id="residenceType" name="residenceType" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx" >
+               </div>
+			 <div class="col-md-6">
+                  <label for="idType">Id Type (Drivers License, Passport) </label>
+                  <input required type="file" class="form-control" id="idType" name="idType" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx">
+               </div>
+               </div>
+               </div>
+                 <fieldset>
+            <legend>Preferred Contact Method:</legend>
+            <div class="contact-toggle">
+                <input value="phone" type="radio" id="phone-contact" name="contactMethod" checked aria-labelledby="phone-label">
+                <input value="email" type="radio" id="email-contact" name="contactMethod" aria-labelledby="email-label">
+<input type="hidden" id="selectedContactMethod" name="selectedContactMethod" value="phone">
+                <div class="toggle-slider"></div>
+
+                <label for="phone-contact" class="toggle-option" id="phone-label" tabindex="0">
+                    <i>📞</i> Phone
+                </label>
+                <label for="email-contact" class="toggle-option" id="email-label" tabindex="0">
+                    <i>✉️</i> Email
+                </label>
+            </div>
+        </fieldset>
                
                       <div class="form-group">
                   <label for="fname">Address</label>
@@ -333,25 +440,41 @@ try{
 </div>
       
 <script>
+
 document.querySelector('form').addEventListener('submit', function(e) {
   const ssn = document.getElementById('SSN').value.trim();
   const checkbox = document.getElementById('confirm');
+  const dob = document.getElementById('DOB').value.trim();
 
-  // Check that SSN is exactly 9 digits
   const ssnPattern = /^\d{9}$/;
+  const dobPattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/;
 
+  // SSN Validation
   if (!ssnPattern.test(ssn)) {
     alert("Please enter a valid 9-digit SSN without dashes.");
     e.preventDefault();
     return;
   }
 
+  // DOB Validation
+  if (!dobPattern.test(dob)) {
+    alert("Please enter a valid Date of Birth in MM/DD/YYYY format.");
+    e.preventDefault();
+    return;
+  }
+
+  // Checkbox Validation
   if (!checkbox.checked) {
     alert("You must agree to the credit check before submitting.");
     e.preventDefault();
     return;
   }
 });
+document.querySelectorAll('input[name="contactMethod"]').forEach((radio) => {
+    radio.addEventListener('change', function () {
+      document.getElementById('selectedContactMethod').value = this.value;
+    });
+  });
 </script>
 
 
