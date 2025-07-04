@@ -18,8 +18,7 @@ public class Vehicle {
 	private String dsecription;
 	private LocalDate datePosted;
 	
-	
-	public Vehicle(String brand, String model,int year,long mileage,double price,String engine,String dsecription,String location) {
+ Vehicle(String brand, String model,int year,long mileage,double price,String engine,String dsecription,String location) {
 		this.brand = brand;
 		this.model = model;
 		this.year = year;

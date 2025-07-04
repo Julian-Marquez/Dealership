@@ -10,9 +10,12 @@ import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -23,11 +26,14 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
-
+@MultipartConfig
 public class handleApplications extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private Part idPart;
+	private Part residencePart;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -59,6 +65,8 @@ public class handleApplications extends HttpServlet {
 	    String state = request.getParameter("state");
 	    String zip = request.getParameter("zip");
 	    String tempSSN = request.getParameter("SSN");
+	    String DOB = request.getParameter("DOB");
+	    String contact = request.getParameter("selectedContactMethod");
 
 	    String brand = request.getParameter("brand");
 	    String model = request.getParameter("model");
@@ -73,6 +81,28 @@ public class handleApplications extends HttpServlet {
 	    String vehicleYears = request.getParameter("vehicleYears");
 	    
 	    String SSN = tempSSN.substring(0,3) + "-" + tempSSN.substring(3,5) + "-" + tempSSN.substring(5,9);
+	    
+	    
+	    residencePart = request.getPart("residenceType");
+	     idPart = request.getPart("idType");
+
+	    
+	    File residenceFile = null;
+	    File idFile = null;
+
+	    try {
+	        residenceFile = File.createTempFile("residence_", "_" + System.currentTimeMillis());
+	        try (InputStream input = residencePart.getInputStream(); FileOutputStream fos = new FileOutputStream(residenceFile)) {
+	            input.transferTo(fos);
+	        }
+
+	        idFile = File.createTempFile("id_", "_" + System.currentTimeMillis());
+	        try (InputStream input = idPart.getInputStream(); FileOutputStream fos = new FileOutputStream(idFile)) {
+	            input.transferTo(fos);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 
 	 
 	    
@@ -112,6 +142,8 @@ public class handleApplications extends HttpServlet {
 	    personalTable.setWidthPercentage(100);
 	    personalTable.setSpacingAfter(15f);
 	    addRow(personalTable, "Full Name", firstName + " " + lastName, labelFont, valueFont);
+	    addRow(personalTable, "DOB", DOB, labelFont, valueFont);
+	    addRow(personalTable, "Prefered Contact", contact, labelFont, valueFont);
 	    addRow(personalTable, "Email", email, labelFont, valueFont);
 	    addRow(personalTable, "Phone", phone, labelFont, valueFont);
 	    addRow(personalTable, "Address", address + ", " + city + ", " + state + " " + zip, labelFont, valueFont);
@@ -149,7 +181,7 @@ public class handleApplications extends HttpServlet {
 	    doc.close();
 
 	 // ✅ Send via email
-	    if (sendDocument(tempFile, firstName + " " + lastName)) {
+	    if (sendDocument(tempFile, firstName + " " + lastName, residenceFile, idFile)) {
 	    	request.getRequestDispatcher("success.jsp").forward(request, response); // ✅ Safe because no output stream used
 		   
 	    } else {
@@ -168,9 +200,9 @@ public class handleApplications extends HttpServlet {
 	}
 
 	
-	private boolean sendDocument(File pdfFile, String fullName) {
+	private boolean sendDocument(File pdfFile, String fullName, File residenceFile, File idFile) {
 	    String subject = "Pre Approval Application from " + fullName;
-	    String content = fullName + " has submitted an application for vehicle financing. Please find the attached PDF.";
+	    String content = fullName + " has submitted an application for vehicle financing. Please find the attached PDF and additional documents.";
 
 	    String host = "smtp.gmail.com";
 	    int port = 587;
@@ -190,7 +222,7 @@ public class handleApplications extends HttpServlet {
 	        }
 	    });
 
-	    try {//
+	    try {
 	        MimeMessage message = new MimeMessage(session);
 	        message.setFrom(new InternetAddress("TruboMotors_Team@gmail.com", "Turbo Motors"));
 	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("Turbomotorsllc@yahoo.com"));
@@ -200,32 +232,65 @@ public class handleApplications extends HttpServlet {
 	        MimeBodyPart textPart = new MimeBodyPart();
 	        textPart.setText(content);
 
-	        // Attachment
+	        // PDF Attachment
 	        MimeBodyPart attachmentPart = new MimeBodyPart();
 	        attachmentPart.attachFile(pdfFile);
+	        
+	        MimeBodyPart idAttachment = new MimeBodyPart();
+	        idAttachment.attachFile(idFile);
+	        idAttachment.setFileName("ID_Document" + getExtension(idPart)); // Optional helper
+
+	        MimeBodyPart residenceAttachment = new MimeBodyPart();
+	        residenceAttachment.attachFile(residenceFile);
+	        residenceAttachment.setFileName("Proof_of_Residence" + getExtension(residencePart));
 
 	        // Combine parts
 	        MimeMultipart multipart = new MimeMultipart("mixed");
 	        multipart.addBodyPart(textPart);
 	        multipart.addBodyPart(attachmentPart);
+	        multipart.addBodyPart(residenceAttachment);
+	        multipart.addBodyPart(idAttachment);
 
 	        message.setContent(multipart);
 
 	        // Send
 	        Transport.send(message);
-	        System.out.println("Email with PDF sent successfully!");
+	        System.out.println("Email with PDF and additional documents sent successfully!");
 	        return true;
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return false;
 	    } finally {
-	        // Optionally delete temp file
-	        if (pdfFile.exists()) {
-	            pdfFile.delete();
-	        }
+	        // Optionally delete temp files
+	        if (pdfFile.exists()) pdfFile.delete();
+	        if (residenceFile != null && residenceFile.exists()) residenceFile.delete();
+	        if (idFile != null && idFile.exists()) idFile.delete();
 	    }
 	}
 
+	
+	private File saveUploadedFile(Part part, String prefix) throws IOException {
+	    if (part == null || part.getSize() == 0) return null;
+
+	    if (prefix == null || prefix.length() < 3) {
+	        prefix = "file_"; // Ensure it's valid
+	    }
+
+	    File tempFile = File.createTempFile(prefix, "_" + System.currentTimeMillis());
+	    try (InputStream input = part.getInputStream(); FileOutputStream fos = new FileOutputStream(tempFile)) {
+	        byte[] buffer = new byte[4096];
+	        int bytesRead;
+	        while ((bytesRead = input.read(buffer)) != -1) {
+	            fos.write(buffer, 0, bytesRead);
+	        }
+	    }
+	    return tempFile;
+	}
+	private String getExtension(Part part) {
+	    String submittedFileName = part.getSubmittedFileName();
+	    return submittedFileName != null && submittedFileName.contains(".") ?
+	           submittedFileName.substring(submittedFileName.lastIndexOf(".")) : "";
+	}
 
 }
