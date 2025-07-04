@@ -405,7 +405,7 @@ try{
   <div class="row">
     <div class="col-md-6">
       <label for="SSN">Full Social Security Number</label>
-      <input  type="password" class="form-control" maxlength="9" pattern="\d{9}" id="SSN" name="SSN" placeholder="000-00-0000" required>
+      <input  type="password" class="form-control" maxlength="9"  id="SSN" name="SSN" placeholder="000-00-0000" required>
     </div>
     <div class="col-md-6 d-flex align-items-start">
       <div class="form-check mt-4">
