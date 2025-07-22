@@ -98,6 +98,9 @@ context.removeAttribute("message");
                      <li class="nav-item">
                         <a class="nav-link" href="login.jsp">login</a>
                      </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="applying.jsp">Get PreAproved Now</a>
+                     </li>
                   </ul>
                </div>
             </nav>

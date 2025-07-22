@@ -65,6 +65,8 @@ try{
   }
 
   body {
+  padding-bottom: 50px;
+  
     background-color: #f5f5f5;
   }
 
@@ -197,11 +199,8 @@ try{
 
    </head>
    <body>
-           <div   style="width: 100%;
-    float: top;
-    background-color: #0e0c06;
- 
-    ">
+  <div style="width: 100%; background-color: #0e0c06;">
+
           <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                <a class="navbar-brand"href="index.jsp"><img src="images/logo2.png"></a>
@@ -221,6 +220,9 @@ try{
                      </li>
                      <li class="nav-item">
                         <a class="nav-link" href="login.jsp">login</a>
+                     </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="applying.jsp">Get PreAproved Now</a>
                      </li>
                   </ul>
                </div>
@@ -308,7 +310,7 @@ try{
               <div class="row">
 			    <div class="col-md-6">
                   <label for="image">Proof Of Residence (renting, mortgage) </label>
-                  <input required type="file" class="form-control" id="residenceType" name="residenceType" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx" >
+                  <input type="file" class="form-control" id="residenceType" name="residenceType" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx" >
                </div>
 			 <div class="col-md-6">
                   <label for="idType">Id Type (Drivers License, Passport) </label>
@@ -405,7 +407,7 @@ try{
   <div class="row">
     <div class="col-md-6">
       <label for="SSN">Full Social Security Number</label>
-      <input  type="password" class="form-control" maxlength="9"  id="SSN" name="SSN" placeholder="000-00-0000" required>
+      <input  type="password" class="form-control" step="0" maxlength="9"  id="SSN" name="SSN" placeholder="000-00-0000" required>
     </div>
     <div class="col-md-6 d-flex align-items-start">
       <div class="form-check mt-4">
@@ -455,6 +457,9 @@ document.querySelector('form').addEventListener('submit', function(e) {
     e.preventDefault();
     return;
   }
+  else{
+	ssn.value = snn;
+  }
 
   // DOB Validation
   if (!dobPattern.test(dob)) {
@@ -470,13 +475,31 @@ document.querySelector('form').addEventListener('submit', function(e) {
     return;
   }
 });
+
+const residence = document.getElementById("residenceFile").files[0];
+const id = document.getElementById("idFile").files[0];
+
+const maxSizeMB = 2; // Max 2MB per file
+const maxBytes = maxSizeMB * 1024 * 1024;
+
+if (residence && residence.size > maxBytes) {
+    alert("Proof of Residence must be smaller than 2MB");
+    e.preventDefault();
+    return;
+}
+
+if (id && id.size > maxBytes) {
+    alert("ID Document must be smaller than 2MB");
+    e.preventDefault();
+    return;
+}
+
 document.querySelectorAll('input[name="contactMethod"]').forEach((radio) => {
     radio.addEventListener('change', function () {
       document.getElementById('selectedContactMethod').value = this.value;
     });
   });
 </script>
-
 
       <!-- copyright section end -->
       <!-- Javascript files-->

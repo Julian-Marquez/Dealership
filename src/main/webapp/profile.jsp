@@ -122,6 +122,9 @@ ServletContext context = request.getServletContext();
                      <li class="nav-item">
                         <a class="nav-link" href="register.jsp">Sign Up</a>
                      </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="applying.jsp">Get PreAproved Now</a>
+                     </li>
                      <%  } %>
                   </ul>
                   <form class="form-inline my-2 my-lg-0">

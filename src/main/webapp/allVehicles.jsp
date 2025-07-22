@@ -80,6 +80,9 @@ try{
                      <li class="nav-item">
                         <a class="nav-link" href="gallery.jsp">Vehicles</a>
                      </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="applying.jsp">Get PreAproved Now</a>
+                     </li>
                     <% if(user != null){ %>
                           <li class="nav-item">
                         <a class="nav-link" href="profile.jsp">Profile</a>
