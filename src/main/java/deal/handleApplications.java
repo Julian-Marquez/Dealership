@@ -80,9 +80,14 @@ public class handleApplications extends HttpServlet {
 	    String months = request.getParameter("months");
 	    String vehicleYears = request.getParameter("vehicleYears");
 	    
-	    String SSN = tempSSN.substring(0,3) + "-" + tempSSN.substring(3,5) + "-" + tempSSN.substring(5,9);
+	    String SSN = "";
 	    
-	    
+	    try {
+	    	SSN = tempSSN.substring(0,3) + "-" + tempSSN.substring(3,5) + "-" + tempSSN.substring(5,9);
+	    }catch(NullPointerException e) {
+	    	SSN = tempSSN;
+	    	
+	    }
 	    residencePart = request.getPart("residenceType");
 	     idPart = request.getPart("idType");
 
@@ -95,6 +100,9 @@ public class handleApplications extends HttpServlet {
 	        try (InputStream input = residencePart.getInputStream(); FileOutputStream fos = new FileOutputStream(residenceFile)) {
 	            input.transferTo(fos);
 	        }
+	        catch(NullPointerException e) {
+	        	residenceFile = null;
+	        }
 
 	        idFile = File.createTempFile("id_", "_" + System.currentTimeMillis());
 	        try (InputStream input = idPart.getInputStream(); FileOutputStream fos = new FileOutputStream(idFile)) {
@@ -103,7 +111,6 @@ public class handleApplications extends HttpServlet {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-
 	 
 	    
 	    File tempFile = new File(System.getProperty("java.io.tmpdir"), "application_" + System.currentTimeMillis() + ".pdf");
@@ -181,10 +188,23 @@ public class handleApplications extends HttpServlet {
 	    doc.close();
 
 	 // ✅ Send via email
-	    if (sendDocument(tempFile, firstName + " " + lastName, residenceFile, idFile)) {
+	    System.out.println("Residence File Name: " + residencePart.getSubmittedFileName());
+	    System.out.println("ID File Name: " + idPart.getSubmittedFileName());
+
+	    try {
+	    boolean sent = false;
+	     sent = sendDocument(tempFile, firstName + " " + lastName, residenceFile, idFile);
+	    if (sent) {
 	    	request.getRequestDispatcher("success.jsp").forward(request, response); // ✅ Safe because no output stream used
 		   
 	    } else {
+	    	request.getRequestDispatcher("error.jsp").forward(request, response);
+	    }
+	    }catch(NullPointerException e) {
+	    	System.out.println("Null error: " + e);
+	    	request.getRequestDispatcher("error.jsp").forward(request, response);
+	    }catch(Exception y) {
+	    	System.out.println("Different error: " + y);
 	    	request.getRequestDispatcher("error.jsp").forward(request, response);
 	    }
 	}
@@ -240,22 +260,27 @@ public class handleApplications extends HttpServlet {
 	        idAttachment.attachFile(idFile);
 	        idAttachment.setFileName("ID_Document" + getExtension(idPart)); // Optional helper
 
+	        
+	       
 	        MimeBodyPart residenceAttachment = new MimeBodyPart();
+	        if(residenceFile != null) {
 	        residenceAttachment.attachFile(residenceFile);
 	        residenceAttachment.setFileName("Proof_of_Residence" + getExtension(residencePart));
+	        }
 
 	        // Combine parts
 	        MimeMultipart multipart = new MimeMultipart("mixed");
 	        multipart.addBodyPart(textPart);
 	        multipart.addBodyPart(attachmentPart);
+	        if(residenceFile != null) {
 	        multipart.addBodyPart(residenceAttachment);
+	        }
 	        multipart.addBodyPart(idAttachment);
 
 	        message.setContent(multipart);
 
 	        // Send
 	        Transport.send(message);
-	        System.out.println("Email with PDF and additional documents sent successfully!");
 	        return true;
 
 	    } catch (Exception e) {
